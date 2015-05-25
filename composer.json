@@ -1,0 +1,12 @@
+{
+    "name": "ddliu/wxpay",
+    "description": "Weixin pay SDK",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "dong",
+            "email": "ddliuhb@gmail.com"
+        }
+    ],
+    "require": {}
+}

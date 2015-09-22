@@ -1,5 +1,6 @@
 <?php
 namespace ddliu\wxpay\Data;
+use ddliu\wxpay\Config;
 
 /**
  * 数据对象基础类，该类中定义数据类最基本的行为，包括：
@@ -107,7 +108,7 @@ class Base
         ksort($this->values);
         $string = $this->ToUrlParams();
         //签名步骤二：在string后加入KEY
-        $string = $string . "&key=".WxPayConfig::KEY;
+        $string = $string . "&key=".Config::$KEY;
         //签名步骤三：MD5加密
         $string = md5($string);
         //签名步骤四：所有字符转为大写

@@ -1,6 +1,7 @@
 <?php
 namespace ddliu\wxpay;
 use ddliu\wxpay\Data\NotifyReply;
+use ddliu\wxpay\Api;
 
 /**
  * 回调基础类
@@ -16,7 +17,7 @@ class Notify extends NotifyReply
     {
         $msg = "OK";
         //当返回false的时候，表示notify中调用NotifyCallBack回调失败获取签名校验失败，此时直接回复失败
-        $result = WxpayApi::notify(array($this, 'NotifyCallBack'), $msg);
+        $result = Api::notify(array($this, 'NotifyCallBack'), $msg);
         if($result == false){
             $this->SetReturn_code("FAIL");
             $this->SetReturn_msg($msg);
@@ -80,6 +81,6 @@ class Notify extends NotifyReply
         {
             $this->SetSign();
         }
-        WxpayApi::replyNotify($this->ToXml());
+        Api::replyNotify($this->ToXml());
     }
 }

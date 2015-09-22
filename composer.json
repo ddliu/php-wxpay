@@ -8,5 +8,10 @@
             "email": "ddliuhb@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "ddliu\\wxpay\\": "src/"
+        }
+    },
     "require": {}
 }

@@ -1,5 +1,5 @@
 <?php
-namespace ddliu\wxpay;
+namespace ddliu\wxpay\Data;
 
 /**
  * 扫码支付模式一生成二维码参数

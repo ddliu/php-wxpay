@@ -1,5 +1,6 @@
 <?php
 namespace ddliu\wxpay\Data;
+use ddliu\wxpay\Exception;
 
 /**
  * 接口调用结果类
@@ -14,14 +15,14 @@ class Results extends Base
     {
         //fix异常
         if(!$this->IsSignSet()){
-            throw new WxPayException("签名错误！");
+            throw new Exception("签名错误！");
         }
         
         $sign = $this->MakeSign();
         if($this->GetSign() == $sign){
             return true;
         }
-        throw new WxPayException("签名错误！");
+        throw new Exception("签名错误！");
     }
     
     /**

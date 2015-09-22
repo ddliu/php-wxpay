@@ -55,13 +55,13 @@
 <body>
 	<div align="center">
         <ul>
-            <li style="background-color:#FF7F24"><a href="http://paysdk.weixin.qq.com/unifiedorder.php">JSAPI支付</a></li>
-            <li style="background-color:#698B22"><a href="http://paysdk.weixin.qq.com/micropay.php">刷卡支付</a></li>
-            <li style="background-color:#8B6914"><a href="http://paysdk.weixin.qq.com/native.php">扫码支付</a></li>
-            <li style="background-color:#CDCD00"><a href="http://paysdk.weixin.qq.com/orderquery.php">订单查询</a></li>
-            <li style="background-color:#CD3278"><a href="http://paysdk.weixin.qq.com/refund.php">订单退款</a></li>
-            <li style="background-color:#848484"><a href="http://paysdk.weixin.qq.com/refundquery.php">退款查询</a></li>
-            <li style="background-color:#8EE5EE"><a href="http://paysdk.weixin.qq.com/refundquery.php">下载订单</a></li>
+            <li style="background-color:#FF7F24"><a href="http://paysdk.weixin.qq.com/example/jsapi.php">JSAPI支付</a></li>
+            <li style="background-color:#698B22"><a href="http://paysdk.weixin.qq.com/example/micropay.php">刷卡支付</a></li>
+            <li style="background-color:#8B6914"><a href="http://paysdk.weixin.qq.com/example/native.php">扫码支付</a></li>
+            <li style="background-color:#CDCD00"><a href="http://paysdk.weixin.qq.com/example/orderquery.php">订单查询</a></li>
+            <li style="background-color:#CD3278"><a href="http://paysdk.weixin.qq.com/example/refund.php">订单退款</a></li>
+            <li style="background-color:#848484"><a href="http://paysdk.weixin.qq.com/example/refundquery.php">退款查询</a></li>
+            <li style="background-color:#8EE5EE"><a href="http://paysdk.weixin.qq.com/example/download.php">下载订单</a></li>
         </ul>
 	</div>
 </body>

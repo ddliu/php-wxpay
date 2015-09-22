@@ -2,12 +2,20 @@
 require_once "WxPay.Exception.php";
 require_once "WxPay.Config.php";
 require_once "WxPay.Data.php";
-require_once 'unit/log.php';
+
+/**
+ * 
+ * 接口访问类，包含所有微信支付API列表的封装，类中方法为static方法，
+ * 每个接口有默认超时时间（除提交被扫支付为10s，上报超时时间为1s外，其他均为6s）
+ * @author widyhu
+ *
+ */
 class WxPayApi
 {
 	/**
 	 * 
-	 * 统一下单
+	 * 统一下单，WxPayUnifiedOrder中out_trade_no、body、total_fee、trade_type必填
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayUnifiedOrder $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -60,7 +68,8 @@ class WxPayApi
 	
 	/**
 	 * 
-	 * 查询订单
+	 * 查询订单，WxPayOrderQuery中out_trade_no、transaction_id至少填一个
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayOrderQuery $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -90,7 +99,8 @@ class WxPayApi
 	
 	/**
 	 * 
-	 * 关闭订单
+	 * 关闭订单，WxPayCloseOrder中out_trade_no必填
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayCloseOrder $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -101,7 +111,7 @@ class WxPayApi
 		$url = "https://api.mch.weixin.qq.com/pay/closeorder";
 		//检测必填参数
 		if(!$inputObj->IsOut_trade_noSet()) {
-			throw new WxPayException("订单查询接口中，out_trade_no至少填一个！");
+			throw new WxPayException("订单查询接口中，out_trade_no必填！");
 		}
 		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
@@ -120,7 +130,9 @@ class WxPayApi
 
 	/**
 	 * 
-	 * 申请退款
+	 * 申请退款，WxPayRefund中out_trade_no、transaction_id至少填一个且
+	 * out_refund_no、total_fee、refund_fee、op_user_id为必填参数
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayRefund $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -160,6 +172,8 @@ class WxPayApi
 	 * 查询退款
 	 * 提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，
 	 * 用零钱支付的退款20分钟内到账，银行卡支付的退款3个工作日后重新查询退款状态。
+	 * WxPayRefundQuery中out_refund_no、out_trade_no、transaction_id、refund_id四个参数必填一个
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayRefundQuery $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -191,7 +205,8 @@ class WxPayApi
 	}
 	
 	/**
-	 * 下载对账单
+	 * 下载对账单，WxPayDownloadBill中bill_date为必填参数
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayDownloadBill $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -201,7 +216,7 @@ class WxPayApi
 	{
 		$url = "https://api.mch.weixin.qq.com/pay/downloadbill";
 		//检测必填参数
-		if(!$inputObj->IsBbill_dateSet()) {
+		if(!$inputObj->IsBill_dateSet()) {
 			throw new WxPayException("对账单接口中，缺少必填参数bill_date！");
 		}
 		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
@@ -222,6 +237,8 @@ class WxPayApi
 	 * 提交被扫支付API
 	 * 收银员使用扫码设备读取微信用户刷卡授权码以后，二维码或条码信息传送至商户收银台，
 	 * 由商户收银台或者商户后台调用该接口发起支付。
+	 * WxPayWxPayMicroPay中body、out_trade_no、total_fee、auth_code参数必填
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayWxPayMicroPay $inputObj
 	 * @param int $timeOut
 	 */
@@ -257,7 +274,8 @@ class WxPayApi
 	
 	/**
 	 * 
-	 * 撤销订单API接口
+	 * 撤销订单API接口，WxPayReverse中参数out_trade_no和transaction_id必须填写一个
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayReverse $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -287,7 +305,9 @@ class WxPayApi
 	
 	/**
 	 * 
-	 * 测速上报
+	 * 测速上报，该方法内部封装在report中，使用时请注意异常流程
+	 * WxPayReport中interface_url、return_code、result_code、user_ip、execute_time_必填
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayReport $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -316,7 +336,6 @@ class WxPayApi
 		
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
-		Log::DEBUG($xml);
 		
 		$startTimeStamp = self::getMillisecond();//请求开始时间
 		$response = self::postXmlCurl($xml, $url, false, $timeOut);
@@ -326,6 +345,7 @@ class WxPayApi
 	/**
 	 * 
 	 * 生成二维码规则,模式一生成支付二维码
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayBizPayUrl $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -352,6 +372,7 @@ class WxPayApi
 	 * 转换短链接
 	 * 该接口主要用于扫码原生支付模式一中的二维码链接转成短链接(weixin://wxpay/s/XXXXXX)，
 	 * 减小二维码数据量，提升扫描速度和精确度。
+	 * appid、mchid、spbill_create_ip、nonce_str不需要填入
 	 * @param WxPayShortUrl $inputObj
 	 * @param int $timeOut
 	 * @throws WxPayException
@@ -424,13 +445,12 @@ class WxPayApi
 	 */
 	public static function replyNotify($xml)
 	{
-		Log::DEBUG($xml);
 		echo $xml;
 	}
 	
 	/**
 	 * 
-	 * 上报数据
+	 * 上报数据， 上报的时候将屏蔽所有异常流程
 	 * @param string $usrl
 	 * @param int $startTimeStamp
 	 * @param array $data
@@ -446,7 +466,7 @@ class WxPayApi
 			 array_key_exists("return_code", $data) &&
 			 $data["return_code"] == "SUCCESS" &&
 			 array_key_exists("result_code", $data) &&
-			 $data["result_code"] == "FAIL")
+			 $data["result_code"] == "SUCCESS")
 		 {
 		 	return;
 		 }
@@ -494,7 +514,7 @@ class WxPayApi
 
 	/**
 	 * 以post方式提交xml到对应的接口url
-	 * Enter description here ...
+	 * 
 	 * @param string $xml  需要post的xml数据
 	 * @param string $url  url
 	 * @param bool $useCert 是否需要证书，默认不需要
@@ -503,24 +523,23 @@ class WxPayApi
 	 */
 	private static function postXmlCurl($xml, $url, $useCert = false, $second = 30)
 	{		
-        //初始化curl        
-       	$ch = curl_init();
+		$ch = curl_init();
 		//设置超时
 		curl_setopt($ch, CURLOPT_TIMEOUT, $second);
 		
-        //如果有配置代理这里就设置代理
+		//如果有配置代理这里就设置代理
 		if(WxPayConfig::CURL_PROXY_HOST != "0.0.0.0" 
 			&& WxPayConfig::CURL_PROXY_PORT != 0){
 			curl_setopt($ch,CURLOPT_PROXY, WxPayConfig::CURL_PROXY_HOST);
 			curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
 		}
-        curl_setopt($ch,CURLOPT_URL, $url);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,FALSE);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,FALSE);
+		curl_setopt($ch,CURLOPT_URL, $url);
+		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,TRUE);
+		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);//严格校验
 		//设置header
 		curl_setopt($ch, CURLOPT_HEADER, FALSE);
 		//要求结果为字符串且输出到屏幕上
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 	
 		if($useCert == true){
 			//设置证书
@@ -534,7 +553,7 @@ class WxPayApi
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		//运行curl
-        $data = curl_exec($ch);
+		$data = curl_exec($ch);
 		//返回结果
 		if($data){
 			curl_close($ch);

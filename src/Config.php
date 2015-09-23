@@ -19,10 +19,10 @@ class Config {
      * 获取地址：https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
      * @var string
      */
-    public static $APPID = 'wx426b3015555a46be';
-    public static $MCHID = '1225312702';
-    public static $KEY = 'e10adc3949ba59abbe56e057f20f883e';
-    public static $APPSECRET = '01c6d59a3f9024db6336662ac95c8e74';
+    public static $APPID = '';
+    public static $MCHID = '';
+    public static $KEY = '';
+    public static $APPSECRET = '';
     
     //=======【证书路径设置】=====================================
     /**
@@ -31,8 +31,8 @@ class Config {
      * API证书下载地址：https://pay.weixin.qq.com/index.php/account/api_cert，下载之前需要安装商户操作证书）
      * @var path
      */
-    public static $SSLCERT_PATH = '../cert/apiclient_cert.pem';
-    public static $SSLKEY_PATH = '../cert/apiclient_key.pem';
+    public static $SSLCERT_PATH = '';
+    public static $SSLKEY_PATH = '';
     
     //=======【curl代理设置】===================================
     /**
@@ -60,7 +60,7 @@ class Config {
                 self::setGlobal($k, $v);
             }
         } else {
-            self::$key = $value;
+            self::$$key = $value;
         }
     }
 }

@@ -3,9 +3,8 @@ date_default_timezone_set('Asia/Shanghai');
 use ddliu\wxpay\Config;
 class SimpleTest extends PHPUnit_Framework_TestCase {
     public function setup() {
-        Config::setGlobal([
-
-        ]);
+        $configs = include(__DIR__.'/config.php');
+        Config::setGlobal($configs);
     }
 
     public function testNativePay() {

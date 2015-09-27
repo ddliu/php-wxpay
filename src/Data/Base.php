@@ -123,4 +123,14 @@ class Base
     {
         return $this->values;
     }
+
+    public function SetValue($key, $value = null) {
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
+                $this->values[$k] = $v;
+            }
+        } else {
+            $this->values[$key] = $value;
+        }
+    }
 }
